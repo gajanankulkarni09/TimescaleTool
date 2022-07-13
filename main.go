@@ -21,7 +21,14 @@ func main() {
 		NumWorkers: *numWorkers,
 	}
 
-	queries, _ := ReadQueries(*fileName)
+	queries, errs := ReadQueries(*fileName)
+	if errs != nil {
+		fmt.Printf("query_params.csv file is not valid\n")
+		for _, err1 := range errs {
+			fmt.Printf("%s\n", err1)
+		}
+		return
+	}
 	performanceEvaluator := GetPerformanceEvaluator(config)
 	performanceResult, err := performanceEvaluator.process(queries)
 
